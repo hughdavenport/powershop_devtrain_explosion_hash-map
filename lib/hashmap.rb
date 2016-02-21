@@ -13,4 +13,8 @@ class HashMap
         @size == 0
     end
 
+    def underlying_size
+        @data.length
+    end
+
 end

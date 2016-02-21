@@ -16,6 +16,9 @@ RSpec.describe HashMap do
             it "should have a size of 0" do
                 expect(@map.size).to eq 0
             end
+            it "should have an underlying size of 10" do
+                expect(@map.underlying_size).to eq 10
+            end
         end
     end
 
