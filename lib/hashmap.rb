@@ -27,6 +27,17 @@ class HashMap
         @data.length
     end
 
+    def reweight
+        olddata = @data
+        @data = Array.new(underlying_size * 2)
+        olddata.each do |bucket|
+            while not bucket.nil?
+                put(bucket.key, bucket.value)
+                bucket = bucket.next_bucket
+            end
+        end
+    end
+
     def hash(key)
         prime = 31
         key.chars.map{|c| c.ord}.inject(prime){|hash,c| hash = hash*prime + c}
@@ -54,6 +65,7 @@ class HashMap
                 @data[index] = bucket
             end
         end
+        reweight if size >= underlying_size * weight
         ret
     end
 
