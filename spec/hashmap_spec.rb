@@ -104,6 +104,38 @@ RSpec.describe HashMap do
                     expect(@map.values.length).to eq 0
                 end
             end
+            context "after adding different" do
+                before do
+                    @map.put("another test", "another value")
+                end
+                it "should have the original key still" do
+                    expect(@map.get("test")).to eq "value"
+                end
+                it "should return the new value" do
+                    expect(@map.get("another test")).to eq "another value"
+                end
+                it "should have a size of 2" do
+                    expect(@map.size).to eq 2
+                end
+                it "should have the original key present in keys" do
+                    expect(@map.keys).to include "test"
+                end
+                it "should have the new key present in keys" do
+                    expect(@map.keys).to include "another test"
+                end
+                it "should have the original value present in values" do
+                    expect(@map.values).to include "value"
+                end
+                it "should have the new value present in values" do
+                    expect(@map.values).to include "another value"
+                end
+                it "should have 2 key(s)" do
+                    expect(@map.keys.length).to eq 2
+                end
+                it "should have 2 value(s)" do
+                    expect(@map.values.length).to eq 2
+                end
+            end
         end
     end
 

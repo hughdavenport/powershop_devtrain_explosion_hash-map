@@ -49,6 +49,10 @@ class HashMap
                 end
                 bucket = bucket.next_bucket
             end
+            if ret.nil?
+                bucket = HashBucket.new(key, value, @data[index])
+                @data[index] = bucket
+            end
         end
         ret
     end
