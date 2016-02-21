@@ -19,6 +19,9 @@ RSpec.describe HashMap do
             it "should have an underlying size of 10" do
                 expect(@map.underlying_size).to eq 10
             end
+            it "should return nil when getting a key" do
+                expect(@map.get("test")).to be_nil
+            end
         end
     end
 
@@ -38,6 +41,12 @@ RSpec.describe HashMap do
             it "should not be present when deleted" do
                 @map.delete("test")
                 expect(@map.get("test")).to be_nil
+            end
+            it "should have size of 1" do
+                expect(@map.size).to eq 1
+            end
+            it "should not be empty" do
+                expect(@map).not_to be_empty
             end
         end
     end

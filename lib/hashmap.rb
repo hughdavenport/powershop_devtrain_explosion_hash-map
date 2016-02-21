@@ -30,6 +30,7 @@ class HashMap
         existing_bucket = @data[index]
         bucket = HashBucket.new(key, value, existing_bucket)
         @data[index] = bucket
+        @keys << key
         true
     end
 
