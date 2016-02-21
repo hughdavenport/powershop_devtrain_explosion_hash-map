@@ -27,9 +27,15 @@ class HashMap
         @data.length
     end
 
+    def reweight_needed
+        size >= (@weight * underlying_size)
+    end
+
     def reweight
+        return unless reweight_needed
+        new_size = underlying_size * 20
         olddata = @data
-        @data = Array.new(underlying_size * 2)
+        @data = Array.new(new_size)
         olddata.each do |bucket|
             while not bucket.nil?
                 put(bucket.key, bucket.value)
@@ -65,7 +71,7 @@ class HashMap
                 @data[index] = bucket
             end
         end
-        reweight if size >= underlying_size * weight
+        reweight if reweight_needed
         ret
     end
 
