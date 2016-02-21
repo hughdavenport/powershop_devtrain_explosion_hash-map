@@ -3,7 +3,6 @@ class HashMap
     attr_reader :weight
 
     def initialize
-        @keys = []
         @data = Array.new(10)
         @weight = 0.8
     end
@@ -13,7 +12,15 @@ class HashMap
     end
 
     def size
-        @keys.length
+        @data.map{|bucket| bucket.nil? ? 0 : bucket.size}.inject(0){|sum,bucket_size| sum+bucket_size}
+    end
+
+    def keys
+      @data.map{|bucket| bucket.nil? ? nil : bucket.keys}.reject{|keys| keys.nil?}.flatten
+    end
+
+    def values
+      @data.map{|bucket| bucket.nil? ? nil : bucket.values}.reject{|values| values.nil?}.flatten
     end
 
     def underlying_size
@@ -27,12 +34,22 @@ class HashMap
     def put(key, value)
         index = hash(key)
         index %= underlying_size
-        existing_bucket = @data[index]
-        bucket = HashBucket.new(key, value, existing_bucket)
-        @data[index] = bucket
-# FIXME: performance of include is O(n)
-        @keys << key unless @keys.include? key
-        true
+        bucket = @data[index]
+        ret = nil
+        if bucket.nil?
+            bucket = HashBucket.new(key, value)
+            @data[index] = bucket
+        else
+            while not bucket.nil?
+                if bucket.key == key
+                    ret = bucket.value
+                    bucket.value = value
+                    break
+                end
+                bucket = bucket.next_bucket
+            end
+        end
+        ret
     end
 
     def get(key)
@@ -69,8 +86,6 @@ class HashMap
             previous = bucket
             bucket = bucket.next
         end
-# FIXME: performance of delete is O(n)
-        @keys.delete(key) unless ret.nil?
         ret
     end
 
@@ -79,12 +94,25 @@ end
 class HashBucket
     # Linked list
 
-    attr_reader :key, :value, :next_bucket
+    attr_reader :key, :next_bucket
+    attr_accessor :value
 
     def initialize(key, value, next_bucket=nil)
         @key = key
         @value = value
         @next_bucket = next_bucket
+    end
+
+    def size
+        @next_bucket.nil? ? 1 : (1 + @next_bucket.size)
+    end
+
+    def keys
+        @next_bucket.nil? ? [@key] : ([@key] + @next_bucket.keys)
+    end
+
+    def values
+        @next_bucket.nil? ? [@value] : ([@value] + @next_bucket.values)
     end
 
 end
