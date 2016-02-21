@@ -30,7 +30,8 @@ class HashMap
         existing_bucket = @data[index]
         bucket = HashBucket.new(key, value, existing_bucket)
         @data[index] = bucket
-        @keys << key
+# FIXME: performance of include is O(n)
+        @keys << key unless @keys.include? key
         true
     end
 
@@ -54,6 +55,7 @@ class HashMap
         index %= underlying_size
         bucket = @data[index]
         previous = nil
+        ret = nil
         while not bucket.nil?
             if bucket.key == key
                 if previous.nil?
@@ -61,11 +63,15 @@ class HashMap
                 else
                     previous.next_bucket = bucket.next_bucket unless previous.nil?
                 end
+                ret = bucket.value
                 break
             end
             previous = bucket
             bucket = bucket.next
         end
+# FIXME: performance of delete is O(n)
+        @keys.delete(key) unless ret.nil?
+        ret
     end
 
 end
