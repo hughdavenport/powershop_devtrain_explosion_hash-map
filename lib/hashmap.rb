@@ -1,6 +1,7 @@
 class HashMap
 
     attr_reader :weight
+    attr_reader :size
 
     def initialize
         @data = Array.new(10)
