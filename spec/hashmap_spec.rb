@@ -22,4 +22,24 @@ RSpec.describe HashMap do
         end
     end
 
+    describe "When I add elements" do
+        context "To a new map" do
+            before do
+                @map = HashMap.new
+                @map.put("test", "value")
+            end
+            it "should return the correct value for that key" do
+                expect(@map.get("test")).to eq "value"
+            end
+            it "should replace the value when adding the same key" do
+                @map.put("test", "value2")
+                expect(@map.get("test")).to eq "value2"
+            end
+            it "should not be present when deleted" do
+                @map.delete("test")
+                expect(@map.get("test")).to be_nil
+            end
+        end
+    end
+
 end
