@@ -1,0 +1,1 @@
+Implement a hash map class. Focus particularly on string keys. In particular, try to roll your own hash function for strings without looking up how to do it.
