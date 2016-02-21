@@ -28,7 +28,8 @@ class HashMap
     end
 
     def hash(key)
-        0
+        prime = 31
+        key.chars.map{|c| c.ord}.inject(prime){|hash,c| hash = hash*prime + c}
     end
 
     def put(key, value)
