@@ -10,6 +10,9 @@ RSpec.describe HashMap do
             it "should be empty" do
                 expect(@map).to be_empty
             end
+            it "should have a weight of 0.8" do
+                expect(@map.weight).to eq 0.8
+            end
         end
     end
 
