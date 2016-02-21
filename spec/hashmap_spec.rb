@@ -137,6 +137,48 @@ RSpec.describe HashMap do
                 end
             end
         end
+        context "to a map just before need for reweighting" do
+            before do
+                @map = HashMap.new
+                # Should have a weight of 8, and underlying_size of 10, so can add 7 items
+                (1..7).each{|i| @map.put("#{i}test#{i}", "value#{i}") }
+            end
+            it "should have a underlying size of 10" do
+                expect(@map.underlying_size).to eq 10
+            end
+            it "should have a size of 7" do
+                expect(@map.size).to eq 7
+            end
+            it "should have a keys size of 7" do
+                expect(@map.keys.length).to eq 7
+            end
+            it "should have a values size of 7" do
+                expect(@map.values.length).to eq 7
+            end
+            it "should be under the reweighting threshold" do
+                expect(@map.underlying_size * @map.weight).to be > @map.size
+            end
+            context "adding one more" do
+                before do
+                    @map.put("test8", "value8")
+                end
+                it "should be under the reweight threshold" do
+                    expect(@map.underlying_size * @map.weight).to be > @map.size
+                end
+                it "should have grown the underlying size" do
+                    expect(@map.underlying_size).to be > 10
+                end
+                it "should have a size of 8" do
+                    expect(@map.size).to eq 8
+                end
+                it "should have a keys size of 8" do
+                    expect(@map.keys.length).to eq 8
+                end
+                it "should have a values size of 8" do
+                    expect(@map.values.length).to eq 8
+                end
+            end
+        end
     end
 
 end
