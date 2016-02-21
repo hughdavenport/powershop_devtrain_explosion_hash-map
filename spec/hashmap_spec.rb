@@ -37,8 +37,23 @@ RSpec.describe HashMap do
             it "should return the correct value when deleting" do
                 expect(@map.delete("test")).to eq "value"
             end
+            it "should return the old value when replacing" do
+                expect(@map.put("test", "value2")).to eq "value"
+            end
+            it "should have the key present in keys" do
+                expect(@map.keys).to include "test"
+            end
+            it "should have the value present in values" do
+                expect(@map.values).to include "value"
+            end
             it "should have size of 1" do
                 expect(@map.size).to eq 1
+            end
+            it "should have 1 key(s)" do
+                expect(@map.keys.length).to eq 1
+            end
+            it "should have 1 value(s)" do
+                expect(@map.values.length).to eq 1
             end
             it "should not be empty" do
                 expect(@map).not_to be_empty
@@ -53,6 +68,18 @@ RSpec.describe HashMap do
                 it "should have a size of 1 still" do
                     expect(@map.size).to eq 1
                 end
+                it "should have the key present in keys" do
+                    expect(@map.keys).to include "test"
+                end
+                it "should have the new value present in values" do
+                    expect(@map.values).to include "value2"
+                end
+                it "should have 1 key(s) still" do
+                    expect(@map.keys.length).to eq 1
+                end
+                it "should have 1 value(s) still" do
+                    expect(@map.values.length).to eq 1
+                end
             end
             context "after deleting" do
                 before do
@@ -66,6 +93,15 @@ RSpec.describe HashMap do
                 end
                 it "should have a size of 0" do
                     expect(@map.size).to eq 0
+                end
+                it "should not have the key in the keys array" do
+                    expect(@map.keys).not_to include "test"
+                end
+                it "should have 0 key(s)" do
+                    expect(@map.keys.length).to eq 0
+                end
+                it "should have 1 value(s)" do
+                    expect(@map.values.length).to eq 0
                 end
             end
         end
