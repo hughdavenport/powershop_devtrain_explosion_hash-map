@@ -7,6 +7,7 @@ class HashMap
     def initialize
         @data = Array.new(10)
         @weight = 0.8
+        @rehash_threshold = 2.0
         @prime = Prime.first(100).sample
     end
 
@@ -48,7 +49,7 @@ class HashMap
     end
 
     def rehash_needed
-        average_get_operations > 2.0
+        average_get_operations > @rehash_threshold
     end
 
     def rehash
