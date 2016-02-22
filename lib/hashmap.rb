@@ -38,7 +38,7 @@ class HashMap
 
     def reweight
         return unless reweight_needed
-        new_size = underlying_size * 20
+        new_size = underlying_size * 2
         olddata = @data
         @data = Array.new(new_size)
         @ops = 0
