@@ -9,6 +9,7 @@ class HashMap
         @weight = params.fetch(:weight, 0.8)
         @rehash_threshold = params.fetch(:rehash_threshold, 2.0)
         @prime = Prime.first(100).sample
+        @ops = 0
     end
 
     def empty?
@@ -40,6 +41,7 @@ class HashMap
         new_size = underlying_size * 20
         olddata = @data
         @data = Array.new(new_size)
+        @ops = 0
         olddata.each do |bucket|
             while not bucket.nil?
                 put(bucket.key, bucket.value)
@@ -54,6 +56,7 @@ class HashMap
 
     def rehash
         return unless rehash_needed
+        @ops = 0
         @prime = Prime.first(100).sample
         olddata = @data
         @data = Array.new(underlying_size)
@@ -63,13 +66,18 @@ class HashMap
                 bucket = bucket.next_bucket
             end
         end
+        @rehashing = false
     end
 
-    def average_get_operations
+    def average_get_operations_slow
         # Return the average number of operations to get an element
         # If we are in a chain, the operations would be 1 + 2 + 3 + ... n operations to get all of them, this is helpfully (n*(n+1)/2).
         # Sum up all of these, then divide by size
         @data.map{|bucket| bucket.nil? ? 0 : bucket.size}.inject(0){|sum,size| sum + (size*(size+1)/2.0)}/size
+    end
+
+    def average_get_operations
+        1.0*@ops/size
     end
 
     def hash(key)
@@ -84,6 +92,7 @@ class HashMap
         if bucket.nil?
             bucket = HashBucket.new(key, value)
             @data[index] = bucket
+            @ops += 1
         else
             while not bucket.nil?
                 if bucket.key == key
@@ -96,6 +105,7 @@ class HashMap
             if ret.nil?
                 bucket = HashBucket.new(key, value, @data[index])
                 @data[index] = bucket
+                @ops += bucket.size
             end
         end
         reweight if reweight_needed
@@ -126,6 +136,7 @@ class HashMap
         ret = nil
         while not bucket.nil?
             if bucket.key == key
+                @ops -= @data[index].size
                 if previous.nil?
                     @data[index] = bucket.next_bucket
                 else

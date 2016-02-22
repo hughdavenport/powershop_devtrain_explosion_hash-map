@@ -164,6 +164,9 @@ RSpec.describe HashMap do
             it "should not require more than 2 operations on average to get a value" do
                 expect(@map.average_get_operations).to be < 2.0
             end
+            it "should have the same number of operations on average using the slow method" do
+                expect(@map.average_get_operations).to eq @map.average_get_operations_slow
+            end
             context "adding one more" do
                 before do
                     @map.put("test8", "value8")
@@ -185,6 +188,9 @@ RSpec.describe HashMap do
                 end
                 it "should not require more than 2 operations on average to get a value" do
                     expect(@map.average_get_operations).to be < 2.0
+                end
+                it "should have the same number of operations on average using the slow method" do
+                    expect(@map.average_get_operations).to eq @map.average_get_operations_slow
                 end
             end
         end
@@ -214,6 +220,9 @@ RSpec.describe HashMap do
             end
             it "should not require more than 2 operations on average to get a value" do
                 expect(@map.average_get_operations).to be < 2.0
+            end
+            it "should have the same number of operations on average using the slow method" do
+                expect(@map.average_get_operations).to eq @map.average_get_operations_slow
             end
             context "after deleting all values" do
                 before do
