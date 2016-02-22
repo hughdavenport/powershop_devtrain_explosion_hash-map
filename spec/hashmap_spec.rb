@@ -223,6 +223,15 @@ RSpec.describe HashMap do
                 end
             end
         end
+        context "adding larger amount of keys" do
+            before do
+                @map = HashMap.new
+                (0..999).each{|i| @map.put("#{i}test#{i}", "value#{i}")}
+            end
+            it "should have a average number of operations below 2" do
+                expect(@map.average_get_operations).to be < 2.0
+            end
+        end
     end
 
 end

@@ -1,3 +1,5 @@
+require 'prime'
+
 class HashMap
 
     attr_reader :weight
@@ -5,6 +7,7 @@ class HashMap
     def initialize
         @data = Array.new(10)
         @weight = 0.8
+        @prime = Prime.first(100).sample
     end
 
     def empty?
@@ -44,9 +47,15 @@ class HashMap
         end
     end
 
+    def average_get_operations
+        # Return the average number of operations to get an element
+        # If we are in a chain, the operations would be 1 + 2 + 3 + ... n operations to get all of them, this is helpfully (n*(n+1)/2).
+        # Sum up all of these, then divide by size
+        @data.map{|bucket| bucket.nil? ? 0 : bucket.size}.inject(0){|sum,size| sum + (size*(size+1)/2.0)}/size
+    end
+
     def hash(key)
-        prime = 31
-        key.chars.map{|c| c.ord}.inject(prime){|hash,c| hash = hash*prime + c}
+        key.chars.map{|c| c.ord}.inject(@prime){|hash,c| hash = hash*@prime + c}
     end
 
     def put(key, value)
