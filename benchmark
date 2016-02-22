@@ -1,0 +1,8 @@
+15:08 $ ruby benchmark.rb
+                 user     system      total        real
+mine adding  0.670000   0.010000   0.680000 (  0.684536)
+mine getting  0.010000   0.000000   0.010000 (  0.013311)
+mine deleting  0.020000   0.000000   0.020000 (  0.016021)
+ruby adding  0.000000   0.000000   0.000000 (  0.000451)
+ruby getting  0.000000   0.000000   0.000000 (  0.000333)
+ruby deleting  0.000000   0.000000   0.000000 (  0.000511)
