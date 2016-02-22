@@ -16,6 +16,9 @@ RSpec.describe HashMap do
             it "should have a size of 0" do
                 expect(@map.size).to eq 0
             end
+            it "should have a rehashing threshold of 2.0" do
+                expect(@map.rehash_threshold).to eq 2.0
+            end
             it "should have an underlying size of 10" do
                 expect(@map.underlying_size).to eq 10
             end
@@ -158,6 +161,9 @@ RSpec.describe HashMap do
             it "should be under the reweighting threshold" do
                 expect(@map.underlying_size * @map.weight).to be > @map.size
             end
+            it "should not require more than 2 operations on average to get a value" do
+                expect(@map.average_get_operations).to be < 2.0
+            end
             context "adding one more" do
                 before do
                     @map.put("test8", "value8")
@@ -176,6 +182,9 @@ RSpec.describe HashMap do
                 end
                 it "should have a values size of 8" do
                     expect(@map.values.length).to eq 8
+                end
+                it "should not require more than 2 operations on average to get a value" do
+                    expect(@map.average_get_operations).to be < 2.0
                 end
             end
         end
@@ -203,6 +212,9 @@ RSpec.describe HashMap do
                     expect(@map.delete("#{i}test#{i}")).to eq "value#{i}"
                 end
             end
+            it "should not require more than 2 operations on average to get a value" do
+                expect(@map.average_get_operations).to be < 2.0
+            end
             context "after deleting all values" do
                 before do
                     (0..99).each{|i| @map.delete("#{i}test#{i}")}
@@ -221,15 +233,6 @@ RSpec.describe HashMap do
                         expect(@map.get("#{i}test#{i}")).to be_nil
                     end
                 end
-            end
-        end
-        context "adding larger amount of keys" do
-            before do
-                @map = HashMap.new
-                (0..999).each{|i| @map.put("#{i}test#{i}", "value#{i}")}
-            end
-            it "should have a average number of operations below 2" do
-                expect(@map.average_get_operations).to be < 2.0
             end
         end
     end

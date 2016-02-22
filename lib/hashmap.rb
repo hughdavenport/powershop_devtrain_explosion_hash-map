@@ -2,12 +2,12 @@ require 'prime'
 
 class HashMap
 
-    attr_reader :weight
+    attr_reader :weight, :rehash_threshold
 
-    def initialize
-        @data = Array.new(10)
-        @weight = 0.8
-        @rehash_threshold = 2.0
+    def initialize(params = {})
+        @data = Array.new(params.fetch(:capacity, 10))
+        @weight = params.fetch(:weight, 0.8)
+        @rehash_threshold = params.fetch(:rehash_threshold, 2.0)
         @prime = Prime.first(100).sample
     end
 
