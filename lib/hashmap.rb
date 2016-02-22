@@ -47,6 +47,23 @@ class HashMap
         end
     end
 
+    def rehash_needed
+        average_get_operations > 2.0
+    end
+
+    def rehash
+        return unless rehash_needed
+        @prime = Prime.first(100).sample
+        olddata = @data
+        @data = Array.new(underlying_size)
+        olddata.each do |bucket|
+            while not bucket.nil?
+                put(bucket.key, bucket.value)
+                bucket = bucket.next_bucket
+            end
+        end
+    end
+
     def average_get_operations
         # Return the average number of operations to get an element
         # If we are in a chain, the operations would be 1 + 2 + 3 + ... n operations to get all of them, this is helpfully (n*(n+1)/2).
@@ -81,6 +98,7 @@ class HashMap
             end
         end
         reweight if reweight_needed
+        rehash if rehash_needed
         ret
     end
 
