@@ -85,7 +85,7 @@ class HashMap
                 ret = bucket.value
                 break
             end
-            bucket = bucket.next
+            bucket = bucket.next_bucket
         end
         ret
     end
@@ -107,7 +107,7 @@ class HashMap
                 break
             end
             previous = bucket
-            bucket = bucket.next
+            bucket = bucket.next_bucket
         end
         ret
     end
@@ -117,8 +117,8 @@ end
 class HashBucket
     # Linked list
 
-    attr_reader :key, :next_bucket
-    attr_accessor :value
+    attr_reader :key
+    attr_accessor :value, :next_bucket
 
     def initialize(key, value, next_bucket=nil)
         @key = key

@@ -179,6 +179,50 @@ RSpec.describe HashMap do
                 end
             end
         end
+        context "adding a large amount of keys" do
+            before do
+                @map = HashMap.new
+                (0..99).each {|i| @map.put("#{i}test#{i}", "value#{i}")}
+            end
+            it "should have a size of 100" do
+                expect(@map.size).to eq 100
+            end
+            it "should have 100 keys" do
+                expect(@map.keys.length).to eq 100
+            end
+            it "should be able to retrieve all values" do
+                (0..99).each do |i|
+                    expect(@map.get("#{i}test#{i}")).to eq "value#{i}"
+                end
+            end
+            it "should have not need reweighting" do
+                expect(@map.size).to be < (@map.underlying_size * @map.weight)
+            end
+            it "should be able to delete all values" do
+                (0..99).each do |i|
+                    expect(@map.delete("#{i}test#{i}")).to eq "value#{i}"
+                end
+            end
+            context "after deleting all values" do
+                before do
+                    (0..99).each{|i| @map.delete("#{i}test#{i}")}
+                end
+                it "should be empty" do
+                    expect(@map).to be_empty
+                end
+                it "should have no keys" do
+                    expect(@map.keys).to be_empty
+                end
+                it "should have a size of 0" do
+                    expect(@map.size).to eq 0
+                end
+                it "should not return valid result for any keys" do
+                    (0..99).each do |i|
+                        expect(@map.get("#{i}test#{i}")).to be_nil
+                    end
+                end
+            end
+        end
     end
 
 end
