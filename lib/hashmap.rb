@@ -90,7 +90,7 @@ class HashMap
     end
 
     def hash(key)
-        key.chars.map{|c| c.ord}.inject(@prime){|hash,c| hash = hash*@prime + c}
+        key.chars.map{|c| c.ord}.inject(@prime){|hash,c| hash*@prime + c}
     end
 
     def put(key, value)
