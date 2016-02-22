@@ -11,14 +11,19 @@ class HashMap
         @grow_multiplier = params.fetch(:grow_multiplier, 2)
         @prime = Prime.first(100).sample
         @ops = 0
+        @size = 0
     end
 
     def empty?
         size == 0
     end
 
-    def size
+    def size_slow
         @data.map{|bucket| bucket.nil? ? 0 : bucket.size}.inject(0){|sum,bucket_size| sum+bucket_size}
+    end
+
+    def size
+        @size
     end
 
     def keys
@@ -43,6 +48,7 @@ class HashMap
         olddata = @data
         @data = Array.new(new_size)
         @ops = 0
+        @size = 0
         olddata.each do |bucket|
             while not bucket.nil?
                 put(bucket.key, bucket.value)
@@ -59,6 +65,7 @@ class HashMap
         return unless rehash_needed
         @rehashing = true
         @ops = 0
+        @size = 0
         @prime = Prime.first(100).sample
         olddata = @data
         @data = Array.new(underlying_size)
@@ -95,6 +102,7 @@ class HashMap
             bucket = HashBucket.new(key, value)
             @data[index] = bucket
             @ops += 1
+            @size += 1
         else
             while not bucket.nil?
                 if bucket.key == key
@@ -108,6 +116,7 @@ class HashMap
                 bucket = HashBucket.new(key, value, @data[index])
                 @data[index] = bucket
                 @ops += bucket.size
+                @size += 1
             end
         end
         reweight if reweight_needed
@@ -139,6 +148,7 @@ class HashMap
         while not bucket.nil?
             if bucket.key == key
                 @ops -= @data[index].size
+                @size -= 1
                 if previous.nil?
                     @data[index] = bucket.next_bucket
                 else
