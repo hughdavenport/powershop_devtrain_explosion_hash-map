@@ -52,11 +52,12 @@ class HashMap
     end
 
     def rehash_needed
-        average_get_operations > @rehash_threshold
+        ! @rehashing && average_get_operations > @rehash_threshold
     end
 
     def rehash
         return unless rehash_needed
+        @rehashing = true
         @ops = 0
         @prime = Prime.first(100).sample
         olddata = @data
