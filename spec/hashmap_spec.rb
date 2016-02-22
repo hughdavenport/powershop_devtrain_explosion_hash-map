@@ -22,6 +22,9 @@ RSpec.describe HashMap do
             it "should have an underlying size of 10" do
                 expect(@map.underlying_size).to eq 10
             end
+            it "should have a grow multiplier of 2" do
+                expect(@map.grow_multiplier).to eq 2
+            end
             it "should return nil when getting a key" do
                 expect(@map.get("test")).to be_nil
             end

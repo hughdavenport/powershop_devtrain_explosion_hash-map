@@ -2,12 +2,13 @@ require 'prime'
 
 class HashMap
 
-    attr_reader :weight, :rehash_threshold
+    attr_reader :weight, :rehash_threshold, :grow_multiplier
 
     def initialize(params = {})
         @data = Array.new(params.fetch(:capacity, 10))
         @weight = params.fetch(:weight, 0.8)
         @rehash_threshold = params.fetch(:rehash_threshold, 2.0)
+        @grow_multiplier = params.fetch(:grow_multiplier, 2)
         @prime = Prime.first(100).sample
         @ops = 0
     end
@@ -38,7 +39,7 @@ class HashMap
 
     def reweight
         return unless reweight_needed
-        new_size = underlying_size * 2
+        new_size = underlying_size * @grow_multiplier
         olddata = @data
         @data = Array.new(new_size)
         @ops = 0
